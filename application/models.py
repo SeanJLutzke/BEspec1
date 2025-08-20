@@ -35,7 +35,8 @@ class Customer(Base):
     customer_name: Mapped[str] = mapped_column(String(75))
     customer_phone: Mapped[str] = mapped_column(String(15), nullable=False)
     customer_email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    #password
+    customer_password: Mapped[str] = mapped_column(String(42), nullable=False)
+    #password is new  
     
 
 #one-to-many customer to tickets
@@ -50,6 +51,7 @@ class Ticket(Base):
     mechanics: Mapped[List["Mechanic"]] = relationship(
         secondary=service_ticket, back_populates="tickets"
     )
+    
 #columns
     id: Mapped[int] = mapped_column(primary_key=True)
     ticket_date: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
@@ -57,6 +59,7 @@ class Ticket(Base):
     service_desc: Mapped[str] = mapped_column(String(255), nullable=False)
     customer_id: Mapped[int] = mapped_column(ForeignKey("customer_accounts.id"))
     customer: Mapped["Customer"] = relationship(back_populates="tickets")
+
 #mechanic table
 class Mechanic(Base):
     __tablename__ = "mechanics"

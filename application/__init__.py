@@ -7,6 +7,9 @@ from .blueprints.ticket import tickets_bp
 from .blueprints.mechanic import mechanics_bp
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
+#part 1 ^^^^^^
+from .extensions import db, ma, limiter, cache
+
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -15,6 +18,9 @@ def create_app(config_name):
     #initialize extensions
     db.init_app(app)
     ma.init_app(app)
+    limiter.init_app(app)
+    cache.init_app(app)
+
 
     migrate = Migrate(app, db)
 
