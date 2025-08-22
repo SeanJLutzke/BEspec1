@@ -34,6 +34,17 @@ def get_mechanic(mechanic_id):
     
     return mechanic_schema.jsonify(mechanic), 200
 
+
+# route to list all mechanics in descending order of most ticket associations
+@mechanics_bp.route("/popular", methods=["GET"])
+def popular_mechanics(): 
+    query = select(Mechanic)
+    mechanics = db.session.execute(query).scalars().all()
+
+    mechanics.sort(key=lambda mechanic: len(mechanic.tickets), reverse=True)
+
+    return mechanics_schema.jsonify(mechanics), 200
+
 @mechanics_bp.route("/<int:mechanic_id>", methods=["PUT"])
 def update_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanic, mechanic_id)

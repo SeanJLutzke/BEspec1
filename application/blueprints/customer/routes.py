@@ -20,18 +20,29 @@ def create_customer():
     except ValidationError as e:
         return jsonify(e.messages), 400
     
-    new_customer = Customer(customer_name=customer_data["customer_name"], customer_email=customer_data["customer_email"], customer_phone=customer_data["customer_phone"], customer_password=["customer_password"])
+    new_customer = Customer(customer_name=customer_data["customer_name"], 
+                            customer_email=customer_data["customer_email"], 
+                            customer_phone=customer_data["customer_phone"], 
+                            customer_password=customer_data["customer_password"])
     db.session.add(new_customer)
     db.session.commit()
 
     return customer_schema.jsonify(new_customer), 201
-
+#apply pagination to get all route
 @customers_bp.route("/", methods=["GET"])
 @cache.cached(timeout=60)
 def get_customers():
-    query =  select(Customer)
-    customers = db.session.execute(query).scalars().all()
-    return customers_schema.jsonify(customers), 200
+    try:
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 20))
+        query =  select(Customer)
+        pagination = db.paginate(query, page=page, per_page=per_page)
+        customers = pagination.items if hasattr(pagination, 'items') else list(pagination)
+        return customers_schema.jsonify(customers), 200
+    except:
+        query =  select(Customer)
+        customers = db.session.execute(query).scalars().all()
+        return customers_schema.jsonify(customers), 200
 
 @customers_bp.route("/<int:customer_id>", methods=["GET"])
 def get_customer(customer_id):
@@ -45,7 +56,7 @@ def get_customer(customer_id):
 @customers_bp.route("/", methods=["PUT"])
 @token_required
 def update_customer(customer_id):
-    query = select(Customer).where(Customer.customer_id == customer_id)
+    query = select(Customer).where(Customer.id == customer_id)
     #(OLD)customer = db.session.get(Customer, customer_id)
     customer = db.session.execute(query).scalars().first()
 
@@ -67,7 +78,7 @@ def update_customer(customer_id):
 @customers_bp.route("/", methods=["DELETE"])
 @token_required
 def delete_customer(customer_id):
-    query = select(Customer).where(Customer.customer_id == customer_id)
+    query = select(Customer).where(Customer.id == customer_id)
     #(OLD)customer = db.session.get(Customer, customer_id)
     customer = db.session.execute(query).scalars().first()
 
@@ -92,8 +103,7 @@ def login():
     customer = db.session.execute(query).scalar_one_or_none()
     #check on this if route is malfunctioning
     if customer and customer.customer_password == password:
-        auth_token = encode_token(customer.customer_id, customer.role.role_name)
-
+        auth_token = encode_token(customer.id)
         response = {
             "status": "success",
             "messages": "Successfully Logged In",
@@ -105,10 +115,13 @@ def login():
 
 
 # Make a route that Gets all tickets for an authenticated customer
-@customers_bp.route("/", methods=["GET"])
+@customers_bp.route("/my-tickets", methods=["GET"])
 @token_required
 def get_customer_tickets(customer_id):
     query = select(Ticket).where(Ticket.customer_id == customer_id)
     tickets = db.session.execute(query).scalars().all()
+
+    if not tickets:
+        return jsonify({"error": "No tickets are associated with customer {customer_id}."}), 400
 
     return jsonify(tickets_schema.dump(tickets)), 200

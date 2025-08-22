@@ -1,0 +1,806 @@
+{
+	"info": {
+		"_postman_id": "40da1563-1023-4659-9867-7e13b4f84b30",
+		"name": "Spacedock2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47633008",
+		"_collection_link": "https://seanjlutzke-7683312.postman.co/workspace/Sean-Lutzke's-Workspace~65c56139-e0a8-46e2-8c06-8772087026b1/collection/47633008-40da1563-1023-4659-9867-7e13b4f84b30?action=share&source=collection_link&creator=47633008"
+	},
+	"item": [
+		{
+			"name": "Add1C",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\" : \"Commander Sisko\",\r\n    \"customer_email\": \"bald@ds9.com\",\r\n    \"customer_phone\": \"555-3289\",\r\n    \"customer_password\": \"SpacePassword\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllC",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\" : \"Commander Sisko\",\r\n    \"customer_email\": \"bald@ds9.com\",\r\n    \"customer_phone\": \"555-3289\",\r\n    \"customer_password\": \"SpacePassword\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginC",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"customer_email\": \"bald@ds9.com\",\r\n    \"customer_password\": \"SpacePassword\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit1C",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU4MjIxMDksImlhdCI6MTc1NTgxODUwOSwic3ViIjoiNSJ9.k_MHAHX45wWOXPKMfcsgpSJ-zDlzgDK93PW7VJIf4XM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\" : \"Captain Sisko\",\r\n    \"customer_email\": \"bald_in_space@ds9.com\",\r\n    \"customer_password\": \"SpacePassword\",\r\n    \"customer_phone\" : \"555-8765\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ExpiredToken",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU4MjIxMDksImlhdCI6MTc1NTgxODUwOSwic3ViIjoiNSJ9.k_MHAHX45wWOXPKMfcsgpSJ-zDlzgDK93PW7VJIf4XM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\" : \"Commander Sisko\",\r\n    \"customer_email\": \"bald@ds9.com\",\r\n    \"customer_phone\": \"555-3289\",\r\n    \"customer_password\": \"SpacePassword\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete1C",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU4MjYzOTMsImlhdCI6MTc1NTgyMjc5Mywic3ViIjoiNSJ9.-FOlrwshW4OwQk_pTa1D8VdoEFbgzyvBneRSuM8bB3c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_email\": \"bald_in_space@ds9.com\",\r\n    \"customer_password\": \"SpacePassword\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add1P",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"part_name\": \"Quantum Torpedo\",\r\n    \"part_price\": 35.00\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/parts",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"parts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get1C",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU4MjYzOTMsImlhdCI6MTc1NTgyMjc5Mywic3ViIjoiNSJ9.-FOlrwshW4OwQk_pTa1D8VdoEFbgzyvBneRSuM8bB3c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllP",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\" : \"Commander Sisko\",\r\n    \"customer_email\": \"bald@ds9.com\",\r\n    \"customer_phone\": \"555-3289\",\r\n    \"customer_password\": \"SpacePassword\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/parts",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"parts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\" : \"Commander Sisko\",\r\n    \"customer_email\": \"bald@ds9.com\",\r\n    \"customer_phone\": \"555-3289\",\r\n    \"customer_password\": \"SpacePassword\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/parts/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"parts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit1P",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"part_name\" : \"Photon Torpedo\",\r\n\"part_price\" : \"27.50\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/parts/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"parts",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete1P",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/parts/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"parts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add1M",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"mechanic_name\": \"Rom\",\r\n    \"mechanic_salary\": 65000,\r\n    \"mechanic_phone\": \"555-9345\",\r\n    \"mechanic_email\": \"rom@ds9.com\"\r\n\r\n\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllM",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get1M",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete1M",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"mechanic_email\": \"deletethisone@crud.com\",\r\n        \"mechanic_name\": \"Delete ME\",\r\n        \"mechanic_phone\": \"555-9378\",\r\n        \"mechanic_salary\": 65000.0\r\n\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit1M",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"mechanic_email\": \"rom@ds9.com\",\r\n    \"mechanic_name\": \"Ensign Rom\",\r\n    \"mechanic_phone\": \"555-9345\",\r\n    \"mechanic_salary\": 65000.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add1T",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n\"ticket_date\": \"2268-01-05T15:00:00Z\",\r\n\"vin\": \"NCC1701\",\r\n\"service_desc\": \"Warp core realignment\",\r\n\"customer_id\": 1\r\n\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/tickets",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllT",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n\"ticket_date\": \"2268-01-05T15:00:00Z\",\r\n\"vin\": \"Defiant\",\r\n\"service_desc\": \"Repair Cloaking Device\",\r\n\"customer_id\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/tickets",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get1T",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"vin\": \"NX74205\",\r\n  \"service_desc\": \"Replicator Malfunction\",\r\n  \"customer_id\": 3,\r\n  \"ticket_date\": \"2372-05-15T14:30:00\",\r\n  \"part_id\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/tickets/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"tickets",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMyT",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU4MzMxOTMsImlhdCI6MTc1NTgyOTU5Mywic3ViIjoiMyJ9.egub3ds_kOvxGGzfD2jNEP_sMNSjrs1svyieuH3jX0E",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\" : \"Commander Sisko\",\r\n    \"customer_email\": \"bald@ds9.com\",\r\n    \"customer_phone\": \"555-3289\",\r\n    \"customer_password\": \"SpacePassword\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/my-tickets",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						"my-tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add1M2T",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mechanic_id\": 1,\r\n  \"action\": \"add\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/tickets/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"tickets",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PopularM",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mechanic_id\": 1,\r\n  \"action\": \"add\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/popular",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						"popular"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WeDontDeleteTickets",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/tickets",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

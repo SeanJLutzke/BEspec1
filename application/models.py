@@ -7,17 +7,10 @@ from sqlalchemy import create_engine, DateTime, ForeignKey, Table, Column, selec
 from marshmallow import ValidationError
 from typing import List, Optional
 from datetime import datetime, timezone
-from .extensions import db, ma
+from .extensions import db, ma, Base
 import os
 
 
-
-#create base model
-class Base(DeclarativeBase):
-    pass
-
-#Initialize SQLAlchemy and Marshmallow
-db = SQLAlchemy(model_class=Base)
 
 #service-ticket association table
 service_ticket = Table(
@@ -36,8 +29,6 @@ class Customer(Base):
     customer_phone: Mapped[str] = mapped_column(String(15), nullable=False)
     customer_email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     customer_password: Mapped[str] = mapped_column(String(42), nullable=False)
-    #password is new  
-    
 
 #one-to-many customer to tickets
     tickets: Mapped[List["Ticket"]] = relationship(
@@ -49,8 +40,8 @@ class Ticket(Base):
     __tablename__ = "tickets"
 
     mechanics: Mapped[List["Mechanic"]] = relationship(
-        secondary=service_ticket, back_populates="tickets"
-    )
+        secondary=service_ticket, back_populates="tickets")
+    
     
 #columns
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -59,6 +50,8 @@ class Ticket(Base):
     service_desc: Mapped[str] = mapped_column(String(255), nullable=False)
     customer_id: Mapped[int] = mapped_column(ForeignKey("customer_accounts.id"))
     customer: Mapped["Customer"] = relationship(back_populates="tickets")
+    part_id: Mapped[Optional[int]] = mapped_column(ForeignKey("parts.id"))
+    part: Mapped[Optional["Part"]] = relationship(back_populates="tickets")
 
 #mechanic table
 class Mechanic(Base):
@@ -69,5 +62,12 @@ class Mechanic(Base):
     mechanic_salary: Mapped[float] = mapped_column(Float, nullable=False)
     mechanic_email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     tickets: Mapped[List["Ticket"]] = relationship(
-        secondary=service_ticket, back_populates="mechanics"
-    )
+        secondary=service_ticket, back_populates="mechanics")
+    
+ #parts/inventory   
+class Part(Base):
+    __tablename__ = "parts"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    part_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    part_price: Mapped[float] = mapped_column(Float, nullable=False)
+    tickets: Mapped[List["Ticket"]] = relationship("Ticket", back_populates="part")

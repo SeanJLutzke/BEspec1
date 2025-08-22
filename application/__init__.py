@@ -5,6 +5,7 @@ from flask import Blueprint
 from .blueprints.customer import customers_bp
 from .blueprints.ticket import tickets_bp
 from .blueprints.mechanic import mechanics_bp
+from .blueprints.part import parts_bp
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 #part 1 ^^^^^^
@@ -28,6 +29,7 @@ def create_app(config_name):
     app.register_blueprint(customers_bp, url_prefix='/customers')
     app.register_blueprint(tickets_bp, url_prefix='/tickets')
     app.register_blueprint(mechanics_bp, url_prefix='/mechanics')
+    app.register_blueprint(parts_bp, url_prefix='/parts')
 
 
     return app
