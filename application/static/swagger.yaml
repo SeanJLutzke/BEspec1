@@ -1,0 +1,255 @@
+#app/static/swagger.yaml
+
+swagger: '2.0'
+info:
+  title: "SpaceDock"
+  description: "This is an API to manage a space Mechanic Shop"
+  version: "0.3.0"
+host: "127.0.0.1:5000"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+
+
+paths:
+  
+  /customers/login:
+  post:
+        tags:
+          - customers
+        summary: "Login endpoint, (generates token)"
+        description: "Validates customer credentials, generates and returns a customer specific token."
+        parameters:
+          - in: "body"
+            name: "body"
+            description: "Login Credentials"
+            required: true
+            schema:
+              $ref: "#/definitions/LoginCredentials"
+        responses:
+          200:
+            description: "Login susccessful"
+            schema:
+              $ref: "#/definitions/LoginResponse"
+
+  /customers/post: #endpoint
+    post: #Post request
+      tags:
+        - Customers
+      summary: "Endpoint to create/register a new user."
+      description: "Endpoint to create a new customer in our mechanic shop system, emails must be unique."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to create a new Customer."
+          required: true
+          schema:
+            $ref: "#/definitions/CreateCustomerPayload"
+      responses:
+        201:
+          descriptions: "Successful Customer Creation"
+          schema:
+            $ref: "#/definitions/CreateCustomerResponse"
+          examples:
+            application/json:
+              customer_id: 1
+              customer_name: John Doe
+              customer_phone: 555-6747
+              customer_email: johnd@email.com
+              customer_password: password123
+
+  /customers/put: #endpoint
+    put: #Put request
+      tags:
+        - Customers
+      summary: "Endpoint to update an existing customer."
+      description: "Endpoint to update an existing customer in our mechanic shop system, emails must be unique. Login required."
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to update an existing customer."
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateCustomerPayload"
+      responses:
+        201:
+          description: "Successful Customer Update"
+          schema:
+            $ref: "#/definitions/UpdateCustomerResponse"
+          examples:
+            application/json:
+              customer_id: 1
+              customer_name: John Doe
+              customer_phone: 555-6747
+              customer_email: johnd@email.com
+              customer_password: password123
+
+  /customers/get:
+    get: #Get request
+      tags:
+        - Customers
+      summary: "Returns all Customers"
+      description: "Endpoint to retrieve a list of all customers."
+      responses:
+        200:
+          description: "Retrieved Customers Successfully"           
+          schema:
+            $ref: "#/definitions/AllCustomers"   
+
+  /customers/get/customer_id: #endpoint
+    get: #Get request
+      tags:
+        - Customers
+      summary: "Endpoint to get an existing customer."
+      description: "Endpoint to get a single existing customer in our mechanic shop system. Requires login."
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to get an  existing customer."
+          required: true
+          schema:
+            $ref: "#/definitions/GetCustomerPayload"
+      responses:
+        201:
+          description: "Successful Customer Get"
+          schema:
+            $ref: "#/definitions/GetCustomerResponse"
+          examples:
+            application/json:
+              customer_id: 1
+              customer_name: John Doe
+              customer_phone: 555-6747
+              customer_email: johnd@email.com
+              customer_password: password123
+
+  /customers/delete:
+    delete: #Delete request
+      tags:
+        - Customers
+      summary: "Endpoint to delete a customer"
+      description: "Endpoint to delete a customer. Requires token authentication, customer must be logged in to delete their account"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Successfully Deleted customer"           
+          schema:
+            $ref: "#/definitions/DeleteCustomerResponse"
+          examples:
+            application/json:
+              message: "successfully deleted user <customer_id>."
+
+
+definitions:
+
+  LoginCredentials:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+
+    required:
+      - customer_email
+      - customer_password
+
+  LoginResponse:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+      message:
+        type: "string"
+      status:
+        type: "string"
+
+#this is different than Dylan's
+CreateCustomerPayload:
+  type: "object"
+  properties:
+    customer_name:
+      type: "string"
+    customer_email:
+      type: "string"
+    customer_phone:
+      type: "string"
+    customer_password:
+      type: "string"
+
+  required:
+    - customer_name
+    - customer_email
+    - customer_phone
+    - customer_password
+
+  CreateCustomerResponse:
+    type: "object"
+    properties: 
+      customer_id:
+        type: "int"
+      customer_name:
+        type: "string"
+      customer_email:
+        type: "string"
+      customer_phone:
+        type: "string"
+      customer_password:
+        type: "string"
+
+GetAllCustomers:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        customer_id:
+          type: "integer"
+        customer_name:
+          type: "string"
+        customer_email:
+          type: "string"
+        customer_phone:
+          type: "string"
+        customer_password:
+          type: "string"
+
+GetSingleCustomer:
+  type: "object"
+  properties: 
+    customer_id:
+      type: "int"
+    customer_name:
+      type: "string"
+    customer_email:
+      type: "string"
+    customer_phone:
+      type: "string"
+    customer_password:
+      type: "string"
+
+  DeleteCustomerResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"   
+
+
+
+
+
+
+
+

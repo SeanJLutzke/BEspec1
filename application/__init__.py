@@ -8,8 +8,20 @@ from .blueprints.mechanic import mechanics_bp
 from .blueprints.part import parts_bp
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
-#part 1 ^^^^^^
 from .extensions import db, ma, limiter, cache
+from flask_swagger_ui import get_swaggerui_blueprint
+
+
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
+API_URL = '/static/swagger.yaml'  # Our API URL (can of course be a local resource)
+
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "SpaceDock"
+    }
+)
 
 
 def create_app(config_name):
@@ -30,6 +42,7 @@ def create_app(config_name):
     app.register_blueprint(tickets_bp, url_prefix='/tickets')
     app.register_blueprint(mechanics_bp, url_prefix='/mechanics')
     app.register_blueprint(parts_bp, url_prefix='/parts')
+    app.register_blueprint(swaggerui_blueprint, url_prefix= SWAGGER_URL)
 
 
     return app
