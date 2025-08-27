@@ -14,3 +14,8 @@ class DevelopmentConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     #http://127.0.0.1:5000/mechanics/mechanics
+
+class TestingConfig:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///testing.db'
+    DEBUG = True
+    CACHE_TYPE = 'SimpleCache'

@@ -37,11 +37,11 @@ paths:
               $ref: "#/definitions/LoginCredentials"
         responses:
           200:
-            description: "Login susccessful"
+            description: "Login successful"
             schema:
               $ref: "#/definitions/LoginResponse"
 
-  /customers/post: #endpoint
+  /customers: #endpoint
     post: #Post request
       tags:
         - Customers
@@ -67,7 +67,7 @@ paths:
               customer_email: johnd@email.com
               customer_password: password123
 
-  /customers/put: #endpoint
+
     put: #Put request
       tags:
         - Customers
@@ -95,7 +95,7 @@ paths:
               customer_email: johnd@email.com
               customer_password: password123
 
-  /customers/get:
+
     get: #Get request
       tags:
         - Customers
@@ -105,9 +105,10 @@ paths:
         200:
           description: "Retrieved Customers Successfully"           
           schema:
-            $ref: "#/definitions/AllCustomers"   
+            $ref: "#/definitions/AllCustomers"  
 
-  /customers/get/customer_id: #endpoint
+
+  /customers/customer_id: #endpoint
     get: #Get request
       tags:
         - Customers
@@ -119,7 +120,7 @@ paths:
         - in: "body"
           name: "body"
           description: "Information required to get an  existing customer."
-          required: true
+          required: true #wtf do you put here?
           schema:
             $ref: "#/definitions/GetCustomerPayload"
       responses:
@@ -135,7 +136,7 @@ paths:
               customer_email: johnd@email.com
               customer_password: password123
 
-  /customers/delete:
+
     delete: #Delete request
       tags:
         - Customers
@@ -151,6 +152,308 @@ paths:
           examples:
             application/json:
               message: "successfully deleted user <customer_id>."
+
+
+
+
+  /tickets: #endpoint
+    post: #Post request
+      tags:
+        - Tickets
+      summary: "Endpoint to create/register a new ticket."
+      description: "Endpoint to create a new ticket in our mechanic shop system."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to create a new Ticket."
+          required: true
+          schema:
+            $ref: "#/definitions/CreateTicketPayload"
+      responses:
+        201:
+          descriptions: "Successful Ticket Creation"
+          schema:
+            $ref: "#/definitions/CreateTicketResponse"
+          examples:
+            application/json:
+              ticket_id: 1
+              ticket_date: placeholder
+              customer_id: 1
+              vin: placeholder
+              service_desc: placeholder
+
+    put: #Put request
+      tags:
+        - Tickets
+      summary: "Endpoint to update an existing ticket."
+      description: "Endpoint to update an existing ticket in our mechanic shop system."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to update an existing ticket."
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTicketPayload"
+      responses:
+        201:
+          description: "Successful Ticket Update"
+          schema:
+            $ref: "#/definitions/UpdateTicketResponse"
+          examples:
+            application/json:
+              ticket_id: 1
+              ticket_date: placeholder
+              customer_id: 1
+              vin: 789023
+              service_desc: "placeholder service"
+
+  get: #Get request
+        tags:
+          - Tickets
+        summary: "Returns all Tickets"
+        description: "Endpoint to retrieve a list of all tickets."
+        responses:
+          200:
+            description: "Retrieved Tickets Successfully"           
+            schema:
+              $ref: "#/definitions/AllTickets" 
+
+
+  /tickets/{ticket_id}: #endpoint
+      get:
+        tags:
+          - Tickets
+        summary: "Endpoint to get an existing ticket."
+        description: "Endpoint to get a single existing ticket in our mechanic shop system."
+        parameters:
+          - in: "path"
+            name: "body"
+            description: "Information required to get an  existing ticket."
+            required: true 
+            schema:
+              $ref: "#/definitions/GetTicketPayload"
+        responses:
+          200:
+            description: "Successful Ticket Get"
+            schema:
+              $ref: "#/definitions/GetTicketResponse"
+            examples:
+              application/json:
+                ticket_id: 1
+                ticket_date: placeholder date
+                customer_id: 1
+                vin: 785954764579
+                service desc: placeholder service
+
+  /mechanics: #endpoint
+    post: #Post request
+      tags:
+        - Mechanics
+      summary: "Endpoint to create/register a new mechanic."
+      description: "Endpoint to create a new mechanic in our mechanic shop system, emails must be unique."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to create a new Mechanic."
+          required: true
+          schema:
+            $ref: "#/definitions/CreateMechanicPayload"
+      responses:
+        201:
+          descriptions: "Successful Mechanic Creation"
+          schema:
+            $ref: "#/definitions/CreateMechanicResponse"
+          examples:
+            application/json:
+              mechanic_id: 1
+              mechanic_name: John Doe
+              mechanic_phone: 555-6747
+              mechanic_email: johnd@email.com
+              mechanic_salary: 100000000
+
+
+    put: #Put request
+      tags:
+        - Mechanics
+      summary: "Endpoint to update an existing mechanic."
+      description: "Endpoint to update an existing mechanic in our mechanic shop system, emails must be unique."
+
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to update an existing mechanic."
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateMechanicPayload"
+      responses:
+        201:
+          description: "Successful Mechanic Update"
+          schema:
+            $ref: "#/definitions/UpdateMechanicResponse"
+          examples:
+            application/json:
+              mechanic_id: 1
+              mechanic_name: John Doe
+              mechanic_phone: 555-6747
+              mechanic_email: johnd@email.com
+              mechanic_salary: 100000000000
+
+
+    get: #Get request
+      tags:
+        - Mechanics
+      summary: "Returns all Mechanics"
+      description: "Endpoint to retrieve a list of all mechanics."
+      responses:
+        200:
+          description: "Retrieved Mechanics Successfully"           
+          schema:
+            $ref: "#/definitions/AllMechanics"  
+
+
+  /mechanics/mechanic_id: #endpoint
+    get: #Get request
+      tags:
+        - Mechanics
+      summary: "Endpoint to get an existing mechanic."
+      description: "Endpoint to get a single existing mechanic in our mechanic shop system."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to get an  existing mechanic."
+          required: true 
+          schema:
+            $ref: "#/definitions/GetMechanicPayload"
+      responses:
+        201:
+          description: "Successful Mechanic Get"
+          schema:
+            $ref: "#/definitions/GetMechanicResponse"
+          examples:
+            application/json:
+              mechanic_id: 1
+              mechanic_name: John Doe
+              mechanic_phone: 555-6747
+              mechanic_email: johnd@email.com
+              mechanic_salary: 100000000000
+
+
+    delete: #Delete request
+      tags:
+        - Mechanics
+      summary: "Endpoint to delete a mechanic"
+      description: "Endpoint to delete a mechanic."
+      responses:
+        200:
+          description: "Successfully Deleted mechanic"           
+          schema:
+            $ref: "#/definitions/DeleteMechanicResponse"
+          examples:
+            application/json:
+              message: "successfully deleted mechanic <mechanic_id>."
+
+
+  /parts: #endpoint
+    post: #Post request
+      tags:
+        - Parts
+      summary: "Endpoint to create/register a new part."
+      description: "Endpoint to create a new part in our part shop system."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to create a new Part."
+          required: true
+          schema:
+            $ref: "#/definitions/CreatePartPayload"
+      responses:
+        201:
+          descriptions: "Successful Part Creation"
+          schema:
+            $ref: "#/definitions/CreatePartResponse"
+          examples:
+            application/json:
+              part_id: 1
+              part_name: "space wheels"
+              part_price: 100000000
+
+
+    put: #Put request
+      tags:
+        - Parts
+      summary: "Endpoint to update an existing part."
+      description: "Endpoint to update an existing part in our part shop system."
+
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to update an existing part."
+          required: true
+          schema:
+            $ref: "#/definitions/UpdatePartPayload"
+      responses:
+        201:
+          description: "Successful Part Update"
+          schema:
+            $ref: "#/definitions/UpdatePartResponse"
+          examples:
+            application/json:
+              part_id: 1
+              part_name: "space wheels"
+              part_price: 100000000000
+
+
+    get: #Get request
+      tags:
+        - Parts
+      summary: "Returns all Parts"
+      description: "Endpoint to retrieve a list of all parts."
+      responses:
+        200:
+          description: "Retrieved Parts Successfully"           
+          schema:
+            $ref: "#/definitions/AllParts"  
+
+
+  /parts/part_id: #endpoint
+    get: #Get request
+      tags:
+        - Parts
+      summary: "Endpoint to get an existing part."
+      description: "Endpoint to get a single existing part in our part shop system."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Information required to get an  existing part."
+          required: true 
+          schema:
+            $ref: "#/definitions/GetPartPayload"
+      responses:
+        201:
+          description: "Successful Part Get"
+          schema:
+            $ref: "#/definitions/GetPartResponse"
+          examples:
+            application/json:
+              part_id: 1
+              part_name: "space wheels"
+              part_price: 100000000000
+
+    delete: #Delete request
+      tags:
+        - Parts
+      summary: "Endpoint to delete a part"
+      description: "Endpoint to delete a part."
+      responses:
+        200:
+          description: "Successfully Deleted part"           
+          schema:
+            $ref: "#/definitions/DeletePartResponse"
+          examples:
+            application/json:
+              message: "successfully deleted part <part_id>."
+
+
 
 
 definitions:
@@ -177,30 +480,10 @@ definitions:
       status:
         type: "string"
 
-#this is different than Dylan's
-CreateCustomerPayload:
-  type: "object"
-  properties:
-    customer_name:
-      type: "string"
-    customer_email:
-      type: "string"
-    customer_phone:
-      type: "string"
-    customer_password:
-      type: "string"
 
-  required:
-    - customer_name
-    - customer_email
-    - customer_phone
-    - customer_password
-
-  CreateCustomerResponse:
+  CreateCustomerPayload:
     type: "object"
-    properties: 
-      customer_id:
-        type: "int"
+    properties:
       customer_name:
         type: "string"
       customer_email:
@@ -210,7 +493,62 @@ CreateCustomerPayload:
       customer_password:
         type: "string"
 
-GetAllCustomers:
+    required:
+      - customer_name
+      - customer_email
+      - customer_phone
+      - customer_password
+
+  CreateCustomerResponse:
+    type: "object"
+    properties: 
+      customer_id:
+        type: "integer"
+      customer_name:
+        type: "string"
+      customer_email:
+        type: "string"
+      customer_phone:
+        type: "string"
+      customer_password:
+        type: "string"
+
+  UpdateCustomerPayload:
+    type: "object"
+    properties:
+      customer_name:
+        type: "string"
+      customer_email:
+        type: "string"
+      customer_phone:
+        type: "string"
+        format: "date"
+      customer_password:
+        type: "string"
+      
+    required:
+      - customer_name
+      - customer_email
+      - customer_phone
+      - customer_password
+
+
+  UpdateCustomerResponse:
+    type: "object"
+    properties:
+      customer_id:
+        type: "integer"
+      customer_name:
+        type: "string"
+      customer_email:
+        type: "string"
+      customer_phone:
+        type: "string"
+      customer_password:
+        type: "string"
+
+
+  GetAllCustomers:
     type: "array"
     items:
       type: "object"
@@ -226,19 +564,19 @@ GetAllCustomers:
         customer_password:
           type: "string"
 
-GetSingleCustomer:
-  type: "object"
-  properties: 
-    customer_id:
-      type: "int"
-    customer_name:
-      type: "string"
-    customer_email:
-      type: "string"
-    customer_phone:
-      type: "string"
-    customer_password:
-      type: "string"
+  GetSingleCustomer:
+    type: "object"
+    properties: 
+      customer_id:
+        type: "integer"
+      customer_name:
+        type: "string"
+      customer_email:
+        type: "string"
+      customer_phone:
+        type: "string"
+      customer_password:
+        type: "string"
 
   DeleteCustomerResponse:
     type: "object"
@@ -246,8 +584,276 @@ GetSingleCustomer:
       message:
         type: "string"   
 
+  CreateTicketPayload:
+    type: "object"
+    properties:
+      ticket_date:
+        type: "string"
+        format: date-time
+      customer_id:
+        type: integer
+      vin:
+        type: "string"
+      service_desc:
+        type: "string"
+
+    required:
+      - ticket_date
+      - customer_id
+      - vin
+      - service_desc 
 
 
+  UpdateTicketPayload:
+    type: "object"
+    properties:
+      ticket_date:
+        type: "string"
+      customer_id:
+        type: "integer"
+      vin:
+        type: "string"
+      service_desc:
+        type: "string"
+      
+    required:
+      - ticket_date
+      - customer_id
+      - vin
+      - service
+
+
+  UpdateTicketResponse:
+    type: "object"
+    properties:
+      ticket_id:
+        type: "integer"
+      ticket_date:
+        type: "string"
+      customer_id:
+        type: "integer"
+      vin:
+        type: "string"
+      service_desc:
+        type: "string"
+
+
+  GetAllTickets:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        ticket_id:
+          type: "integer"
+        ticket_date:
+          type: "string"
+        customer_id:
+          type: "integer"
+        vin:
+          type: "string"
+        service_desc:
+          type: "string"
+
+  GetSingleTicket:
+    type: "object"
+    properties: 
+      ticket_id:
+        type: "integer"
+      ticket_date:
+        type: "string"
+      customer_id:
+        type: "integer"
+      vin:
+        type: "string"
+      service_desc:
+        type: "string"
+
+
+
+  CreateMechanicPayload:
+    type: "object"
+    properties:
+      mechanic_name:
+        type: "string"
+      mechanic_email:
+        type: "string"
+      mechanic_phone:
+        type: "string"
+      mechanic_salary:
+        type: "string"
+
+    required:
+      - mechanic_name
+      - mechanic_email
+      - mechanic_phone
+      - mechanic_salary
+
+  CreateMechanicResponse:
+    type: "object"
+    properties: 
+      mechanic_id:
+        type: "integer"
+      mechanic_name:
+        type: "string"
+      mechanic_email:
+        type: "string"
+      mechanic_phone:
+        type: "string"
+      mechanic_salary:
+        type: "string"
+
+  UpdateMechanicPayload:
+    type: "object"
+    properties:
+      mechanic_name:
+        type: "string"
+      mechanic_email:
+        type: "string"
+      mechanic_phone:
+        type: "string"
+        format: "date"
+      mechanic_salary:
+        type: "string"
+      
+    required:
+      - mechanic_name
+      - mechanic_email
+      - mechanic_phone
+      - mechanic_salary
+
+
+  UpdateMechanicResponse:
+    type: "object"
+    properties:
+      mechanic_id:
+        type: "integer"
+      mechanic_name:
+        type: "string"
+      mechanic_email:
+        type: "string"
+      mechanic_phone:
+        type: "string"
+      mechanic_salary:
+        type: "string"
+
+
+  GetAllMechanics:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        mechanic_id:
+          type: "integer"
+        mechanic_name:
+          type: "string"
+        mechanic_email:
+          type: "string"
+        mechanic_phone:
+          type: "string"
+        mechanic_salary:
+          type: "string"
+
+  GetSingleMechanic:
+    type: "object"
+    properties: 
+      mechanic_id:
+        type: "integer"
+      mechanic_name:
+        type: "string"
+      mechanic_email:
+        type: "string"
+      mechanic_phone:
+        type: "string"
+      mechanic_salary:
+        type: "string"
+
+  DeleteMechanicResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"   
+
+  CreatePartPayload:
+    type: "object"
+    properties:
+      part_name:
+        type: "string"
+      part_price:
+        type: "string"
+
+
+    required:
+      - part_name
+      - part_price
+
+
+  CreatePartResponse:
+    type: "object"
+    properties: 
+      part_id:
+        type: "integer"
+      part_name:
+        type: "string"
+      part_price:
+        type: "string"
+
+
+  UpdatePartPayload:
+    type: "object"
+    properties:
+      part_name:
+        type: "string"
+      part_price:
+        type: "string"
+
+      
+    required:
+      - part_name
+      - part_price
+
+
+
+  UpdatePartResponse:
+    type: "object"
+    properties:
+      part_id:
+        type: "integer"
+      part_name:
+        type: "string"
+      part_price:
+        type: "string"
+
+
+
+  GetAllParts:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        part_id:
+          type: "integer"
+        part_name:
+          type: "string"
+        part_price:
+          type: "string"
+
+
+  GetSinglePart:
+    type: "object"
+    properties: 
+      part_id:
+        type: "integer"
+      part_name:
+        type: "string"
+      part_price:
+        type: "string"
+
+
+  DeletePartResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"   
 
 
 
