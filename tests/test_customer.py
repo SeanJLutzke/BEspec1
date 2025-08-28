@@ -94,3 +94,5 @@ class TestCustomer(unittest.TestCase):
         headers = {'Authorization': "Bearer " + self.test_login_customer()}
         response = self.client.delete('/customers/', headers=headers)
         self.assertEqual(response.status_code, 200)
+
+        #DONT FORGET CUSTOMERS/MY-TICKETS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

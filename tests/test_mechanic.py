@@ -2,7 +2,7 @@ from app import create_app
 from application.models import db, Mechanic
 import unittest
 from datetime import datetime
-from application.utils.util import encode_token
+
 
 class TestMechanic(unittest.TestCase):
     def setUp(self):
@@ -43,11 +43,10 @@ class TestMechanic(unittest.TestCase):
             "mechanic_name": "Peter",
             "mechanic_phone": "8754765947",
             "mechanic_email": "test@email.com",
-            "mechanic_salary": "PetersPassword"
+            "mechanic_salary": "10000000"
         }
 
-        headers = {'Authorization': "Bearer " + self.test_login_mechanic()}
-        response = self.client.put('/mechanics/', json=update_payload, headers=headers)
+        response = self.client.put('/mechanics/<int: mechanic_id>', json=update_payload)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['mechanic_name'], 'Peter') 
         self.assertEqual(response.json['mechanic_email'], 'test@email.com')
@@ -63,6 +62,5 @@ class TestMechanic(unittest.TestCase):
 
 
     def test_delete_mechanic(self):
-        headers = {'Authorization': "Bearer " + self.test_login_mechanic()}
-        response = self.client.delete('/mechanics/', headers=headers)
+        response = self.client.delete('/mechanics/<int: mechanic_id>')
         self.assertEqual(response.status_code, 200)
