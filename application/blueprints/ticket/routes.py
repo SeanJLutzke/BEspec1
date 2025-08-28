@@ -6,7 +6,7 @@ from application.models import Ticket, Mechanic, db
 from . import tickets_bp
 
 
-@tickets_bp.route("/", methods=["POST"])
+@tickets_bp.route("/", methods=["POST"], strict_slashes=False)
 def create_ticket():
     try:
         ticket_data = ticket_schema.load(request.json)
@@ -18,13 +18,13 @@ def create_ticket():
     db.session.commit()
     return ticket_schema.jsonify(new_ticket), 201
 
-@tickets_bp.route("/", methods=["GET"])
+@tickets_bp.route("/", methods=["GET"], strict_slashes=False)
 def get_tickets():
     query = select(Ticket)
     tickets = db.session.execute(query).scalars().all()
     return tickets_schema.jsonify(tickets), 200
 
-@tickets_bp.route("/<int:ticket_id>", methods=["GET"])
+@tickets_bp.route("/<int:ticket_id>", methods=["GET"], strict_slashes=False)
 def get_ticket(ticket_id):
     ticket = db.session.get(Ticket, ticket_id)
 
@@ -33,7 +33,7 @@ def get_ticket(ticket_id):
     
     return ticket_schema.jsonify(ticket), 200
 
-@tickets_bp.route("/<int:ticket_id>", methods=["PUT"])
+@tickets_bp.route("/<int:ticket_id>", methods=["PUT"], strict_slashes=False)
 def update_ticket(ticket_id):
     ticket = db.session.get(Ticket, ticket_id)
 

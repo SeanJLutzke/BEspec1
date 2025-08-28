@@ -7,10 +7,14 @@ from application.utils.util import encode_token
 
 class TestCustomer(unittest.TestCase):
     def setUp(self):
-        self.app = create_app("TestingConfig")
+        self.app = create_app('TestingConfig')
+        self.customer = Customer(customer_name="test_user", customer_email="test@email.com", customer_phone="8376458432" , customer_password='test')
         with self.app.app_context():
             db.drop_all()
             db.create_all()
+            db.session.add(self.customer)
+            db.session.commit()
+        self.token = encode_token(1)
         self.client = self.app.test_client()
 
     def test_create_customer(self):
@@ -21,7 +25,7 @@ class TestCustomer(unittest.TestCase):
             "customer_password": "123"
         }
 
-        response = self.client.post('/customers/', json=customer_payload)
+        response = self.client.post('/customers', json=customer_payload)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json['customer_name'], "John Doe")
 
@@ -32,23 +36,11 @@ class TestCustomer(unittest.TestCase):
             "customer_password": "123"       
         }
 
-        response = self.client.post('/customers/', json=customer_payload)
+        response = self.client.post('/customers', json=customer_payload)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json['customer_email'], ['Missing data for required field.'])
 
-        class Testcustomer(unittest.TestCase):
-
-        def setUp(self):
-            self.app = create_app('TestingConfig')
-            self.customer = Customer(customer_name="test_user", customer_email="test@email.com", customer_phone="8376458432" , password='test')
-            with self.app.app_context():
-                db.drop_all()
-                db.create_all()
-                db.session.add(self.customer)
-                db.session.commit()
-            self.token = encode_token(1)
-            self.client = self.app.test_client()
-
+        
     def test_login_customer(self):
         credentials = {
             "customer_email": "test@email.com",
@@ -58,4 +50,47 @@ class TestCustomer(unittest.TestCase):
         response = self.client.post('/customers/login', json=credentials)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['status'], 'success')
-        return response.json['token']
+        self.assertIn("auth_token", response.json)
+        return response.json['auth_token']
+        
+    def test_invalid_login(self):
+        credentials = {
+            "customer_email": "bad_email@email.com",
+            "customer_password": "bad_pw"
+        }
+
+        response = self.client.post('/customers/login', json=credentials)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json['messages'], "Username or Password incorrect (or both. That seems like something you would do.)")
+
+    def test_update_customer(self):
+        update_payload = {
+            "customer_name": "Peter",
+            "customer_phone": "8754765947",
+            "customer_email": "test@email.com",
+            "customer_password": "PetersPassword"
+        }
+
+        headers = {'Authorization': "Bearer " + self.test_login_customer()}
+        response = self.client.put('/customers/', json=update_payload, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json['customer_name'], 'Peter') 
+        self.assertEqual(response.json['customer_email'], 'test@email.com')
+
+    def test_get_customer(self):
+        headers = {'Authorization': "Bearer " + self.test_login_customer()}
+        response = self.client.get('/customers/', headers=headers)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json['customer_name'], "test_user")
+
+
+    def test_get_all_customers(self):
+        response = self.client.get('/customers')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json[0]['customer_name'], "test_user")
+
+
+    def test_delete_customer(self):
+        headers = {'Authorization': "Bearer " + self.test_login_customer()}
+        response = self.client.delete('/customers/', headers=headers)
+        self.assertEqual(response.status_code, 200)

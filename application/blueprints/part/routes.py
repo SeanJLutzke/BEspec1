@@ -7,7 +7,7 @@ from flask import Blueprint
 from . import parts_bp
 from application.blueprints.ticket.schemas import tickets_schema
 
-@parts_bp.route("/", methods=["POST"])
+@parts_bp.route("/", methods=["POST"], strict_slashes=False)
 def create_part():
     try:
         part_data = part_schema.load(request.json)
@@ -20,7 +20,7 @@ def create_part():
 
     return part_schema.jsonify(new_part), 201
 
-@parts_bp.route("/", methods=["GET"])
+@parts_bp.route("/", methods=["GET"], strict_slashes=False)
 def get_parts():
     try:
         page = int(request.args.get("page", 1))
@@ -33,7 +33,7 @@ def get_parts():
         parts = db.session.execute(query).scalars().all()
         return parts_schema.jsonify(parts), 200
     
-@parts_bp.route("/<int:part_id>", methods=["GET"])
+@parts_bp.route("/<int:part_id>", methods=["GET"], strict_slashes=False)
 def get_part(part_id):
     part = db.session.get(Part, part_id)
 
@@ -42,7 +42,7 @@ def get_part(part_id):
     
     return part_schema.jsonify(part), 200
 
-@parts_bp.route("/<int:part_id>", methods=["PUT"])
+@parts_bp.route("/<int:part_id>", methods=["PUT"], strict_slashes=False)
 def update_part(part_id):
     part = db.session.get(Part, part_id)
 
@@ -59,7 +59,7 @@ def update_part(part_id):
     db.session.commit()
     return part_schema.jsonify(part), 200
 
-@parts_bp.route("/<int:part_id>", methods=["DELETE"])
+@parts_bp.route("/<int:part_id>", methods=["DELETE"], strict_slashes=False)
 def delete_part(part_id):
     part = db.session.get(Part, part_id)
 

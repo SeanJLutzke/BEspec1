@@ -7,7 +7,7 @@ from . import mechanics_bp
 
 
 #CRUD for mechanics
-@mechanics_bp.route("/", methods=["POST"])
+@mechanics_bp.route("/", methods=["POST"], strict_slashes=False)
 def create_mechanic():
     try:
         mechanic_data = mechanic_schema.load(request.json)
@@ -19,13 +19,13 @@ def create_mechanic():
     db.session.commit()
     return mechanic_schema.jsonify(new_mechanic), 201
 
-@mechanics_bp.route("/", methods=["GET"])
+@mechanics_bp.route("/", methods=["GET"], strict_slashes=False)
 def get_mechanics():
     query = select(Mechanic)
     mechanics = db.session.execute(query).scalars().all()
     return mechanics_schema.jsonify(mechanics),200
     
-@mechanics_bp.route("/<int:mechanic_id>", methods=["GET"])
+@mechanics_bp.route("/<int:mechanic_id>", methods=["GET"], strict_slashes=False)
 def get_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanic, mechanic_id)
 
@@ -36,7 +36,7 @@ def get_mechanic(mechanic_id):
 
 
 # route to list all mechanics in descending order of most ticket associations
-@mechanics_bp.route("/popular", methods=["GET"])
+@mechanics_bp.route("/popular", methods=["GET"], strict_slashes=False)
 def popular_mechanics(): 
     query = select(Mechanic)
     mechanics = db.session.execute(query).scalars().all()
@@ -45,7 +45,7 @@ def popular_mechanics():
 
     return mechanics_schema.jsonify(mechanics), 200
 
-@mechanics_bp.route("/<int:mechanic_id>", methods=["PUT"])
+@mechanics_bp.route("/<int:mechanic_id>", methods=["PUT"], strict_slashes=False)
 def update_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanic, mechanic_id)
 
@@ -64,7 +64,7 @@ def update_mechanic(mechanic_id):
     db.session.commit()
     return mechanic_schema.jsonify(mechanic), 200
 
-@mechanics_bp.route("/<int:mechanic_id>", methods=["DELETE"])
+@mechanics_bp.route("/<int:mechanic_id>", methods=["DELETE"], strict_slashes=False)
 def delete_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanic, mechanic_id)
 

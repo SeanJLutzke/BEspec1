@@ -13,7 +13,7 @@ from application.blueprints.ticket.schemas import tickets_schema
 
 #customers_bp = Blueprint('customers', __name__)
 
-@customers_bp.route("/", methods=["POST"])
+@customers_bp.route("/", methods=["POST"], strict_slashes=False)
 def create_customer():
     try:
         customer_data = customer_schema.load(request.json)
@@ -29,7 +29,7 @@ def create_customer():
 
     return customer_schema.jsonify(new_customer), 201
 #apply pagination to get all route
-@customers_bp.route("/", methods=["GET"])
+@customers_bp.route("/", methods=["GET"], strict_slashes=False)
 @cache.cached(timeout=60)
 def get_customers():
     try:
@@ -44,7 +44,7 @@ def get_customers():
         customers = db.session.execute(query).scalars().all()
         return customers_schema.jsonify(customers), 200
 
-@customers_bp.route("/<int:customer_id>", methods=["GET"])
+@customers_bp.route("/<int:customer_id>", methods=["GET"], strict_slashes=False)
 def get_customer(customer_id):
     customer = db.session.get(Customer, customer_id)
 
@@ -53,7 +53,7 @@ def get_customer(customer_id):
     
     return customer_schema.jsonify(customer), 200
 
-@customers_bp.route("/", methods=["PUT"])
+@customers_bp.route("/", methods=["PUT"], strict_slashes=False)
 @token_required
 def update_customer(customer_id):
     query = select(Customer).where(Customer.id == customer_id)
@@ -75,7 +75,7 @@ def update_customer(customer_id):
     db.session.commit()
     return customer_schema.jsonify(customer), 200
 
-@customers_bp.route("/", methods=["DELETE"])
+@customers_bp.route("/", methods=["DELETE"], strict_slashes=False)
 @token_required
 def delete_customer(customer_id):
     query = select(Customer).where(Customer.id == customer_id)
@@ -89,7 +89,7 @@ def delete_customer(customer_id):
     db.session.commit()
     return jsonify({"message": f"Successfully deleted Customer {customer_id}."}), 200
 #part 1^^^^
-@customers_bp.route("/login", methods=['POST'])
+@customers_bp.route("/login", methods=['POST'], strict_slashes=False)
 @limiter.limit("5 per hour")
 def login():
     try:
@@ -111,11 +111,11 @@ def login():
         }
         return jsonify(response), 200
     else:
-        return jsonify({'messages': "Username or Password incorrect (or both. That seems like something you would do.) "}), 401
+        return jsonify({'messages': "Username or Password incorrect (or both. That seems like something you would do.)"}), 401
 
 
 # Make a route that Gets all tickets for an authenticated customer
-@customers_bp.route("/my-tickets", methods=["GET"])
+@customers_bp.route("/my-tickets", methods=["GET"], strict_slashes=False)
 @token_required
 def get_customer_tickets(customer_id):
     query = select(Ticket).where(Ticket.customer_id == customer_id)
