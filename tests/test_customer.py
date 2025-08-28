@@ -96,17 +96,20 @@ class TestCustomer(unittest.TestCase):
         response = self.client.delete('/customers/', headers=headers)
         self.assertEqual(response.status_code, 200)
 
-        #DONT FORGET CUSTOMERS/MY-TICKETS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     def test_get_my_tickets(self):
-        ticket_payload ={
+        ticket_payload = {
             "ticket_date" : datetime.utcnow().isoformat(),
             "customer_id": self.customer_id,
             "vin": "NCC1701",
             "service_desc": "phase coil realignment"
         }
+        create_resp = self.client.post('/tickets', json=ticket_payload)
+        self.assertEqual(create_resp.status_code, 201)
 
         headers = {'Authorization': "Bearer " + self.test_login_customer()}
-        response = self.client.get(f'/customers/my-tickets', headers=headers)
-        self.assertEqual(response.status_code, 200)
-        data = response.get_json()
+        resp = self.client.get('/customers/my-tickets', headers=headers)
+        self.assertEqual(resp.status_code, 200)
+        data = resp.get_json()
         self.assertIsInstance(data, list)
+        self.assertTrue(any(t.get('vin') == "NCC1701" for t in data))
