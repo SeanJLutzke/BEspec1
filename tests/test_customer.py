@@ -1,7 +1,7 @@
 from app import create_app
-from application.models import db, Customer
+from application.models import db, Customer, Ticket
 import unittest
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from application.utils.util import encode_token
 
 
@@ -14,7 +14,8 @@ class TestCustomer(unittest.TestCase):
             db.create_all()
             db.session.add(self.customer)
             db.session.commit()
-        self.token = encode_token(1)
+            self.customer_id = self.customer.id
+        self.token = encode_token(self.customer_id)
         self.client = self.app.test_client()
 
     def test_create_customer(self):
@@ -79,7 +80,7 @@ class TestCustomer(unittest.TestCase):
 
     def test_get_customer(self):
         headers = {'Authorization': "Bearer " + self.test_login_customer()}
-        response = self.client.get('/customers/', headers=headers)
+        response = self.client.get(f'/customers/{self.customer_id}', headers=headers)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['customer_name'], "test_user")
 
@@ -96,3 +97,16 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         #DONT FORGET CUSTOMERS/MY-TICKETS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def test_get_my_tickets(self):
+        ticket_payload ={
+            "ticket_date" : datetime.utcnow().isoformat(),
+            "customer_id": self.customer_id,
+            "vin": "NCC1701",
+            "service_desc": "phase coil realignment"
+        }
+
+        headers = {'Authorization': "Bearer " + self.test_login_customer()}
+        response = self.client.get(f'/customers/my-tickets', headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertIsInstance(data, list)
