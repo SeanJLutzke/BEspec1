@@ -120,7 +120,7 @@ paths:
         - in: "body"
           name: "body"
           description: "Information required to get an  existing customer."
-          required: true #wtf do you put here?
+          required: true 
           schema:
             $ref: "#/definitions/GetCustomerPayload"
       responses:

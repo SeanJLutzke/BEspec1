@@ -1,61 +1,101 @@
-# from app import create_app
-# from application.models import db, Ticket
-# import unittest
-# from datetime import datetime
+from app import create_app
+from application.models import db, Ticket, Customer, Mechanic
+import unittest
+from datetime import datetime, timedelta, timezone
 
-# #new_ticket = Ticket(ticket_date=ticket_data["ticket_date"], customer_id=ticket_data["customer_id"], vin=ticket_data["vin"], service_desc=ticket_data["service_desc"]
 
-# class TestTicket(unittest.TestCase):
-#     def setUp(self): 
-#         self.app = create_app('TestingConfig')
-#         self.ticket = Ticket(ticket_date="test_user", customer_id=1, vin="8376458432" , service_desc='100000')
-#         with self.app.app_context():
-#             db.drop_all()
-#             db.create_all()
-#             db.session.add(self.ticket)
-#             db.session.commit()
-#         self.client = self.app.test_client()
+class TestTicket(unittest.TestCase):
+    def setUp(self): 
+        self.app = create_app('TestingConfig')
 
-#     def test_create_ticket(self):
-#         ticket_payload = {
-#         "ticket_date": "2372-05-15T14:30:00",
-#         "customer_id": 1,
-#         "vin": "^",
-#         "service_desc": "123"
-#     }
+        with self.app.app_context():
+            db.drop_all()
+            db.create_all()
 
-#         response = self.client.post('/tickets', json=ticket_payload)
-#         self.assertEqual(response.status_code, 201)
-#         self.assertEqual(response.json['ticket_date'], "2372-05-15T14:30:00")
+            customer = Customer(
+                customer_name="Jean-Luc Picard",
+                customer_email="imisstheseason1tights@enterprise_d.com",
+                customer_phone="555-1701",
+                customer_password="IFartInTheTurboLift"
+                )
+            db.session.add(customer)
+            db.session.commit()
+            self.customer_id = customer.id
 
-#         def test_invalid_creation(self):
-#             ticket_payload = {
-#             "ticket_date": "2372-05-15T14:30:00",
-#             "vin": "^",
-#             "service_desc": "123"       
-#         }
+            ticket = Ticket(
+                ticket_date=datetime.fromisoformat("2372-05-15T14:30:00"),
+                customer_id=self.customer_id,
+                vin="NCC1701D",
+                service_desc="Turbolift Cabin Filter Replacement"
+            )
+            db.session.add(ticket)
+            db.session.commit()
+            self.ticket_id = ticket.id
 
-#         response = self.client.post('/tickets', json=ticket_payload)
-#         self.assertEqual(response.status_code, 400)
-#         self.assertEqual(response.json['customer_id'], ['Missing data for required field.'])
+        self.client = self.app.test_client()
 
-#     def test_update_ticket(self):
-#         update_payload = {
-#             "ticket_date": "2372-05-15T14:30:00",
-#             "vin": "^",
-#             "customer_id": 1,
-#             "service_desc": "10000000"
-#         }
+    def test_create_ticket(self):
+        ticket_payload = {
+            "ticket_date": "2372-05-15T14:30:00",
+            "customer_id": self.customer_id,
+            "vin": "NCC1701E",
+            "service_desc": "Turbolift Cabin Filter Replacement"
+        }
 
-#         response = self.client.put('/tickets/<int: ticket_id>', json=update_payload)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json['ticket_date'], "2372-05-15T14:30:00") 
-#         self.assertEqual(response.json['customer_id'], 'test@email.com')
+        response = self.client.post('/tickets', json=ticket_payload)
+        self.assertEqual(response.status_code, 201)
+        data = response.get_json()
+        self.assertEqual(data["ticket_date"], ticket_payload["ticket_date"])
+        self.assertEqual(data["customer_id"], self.customer_id)
+        self.assertEqual(data["vin"], ticket_payload["vin"])
+        self.assertEqual(data["service_desc"], ticket_payload["service_desc"])
 
-# #DONT FORGET TO ADD GET 1
+    def test_invalid_creation(self):
+        ticket_payload = {
+            "ticket_date": "2372-05-15T14:30:00",
+            "vin": "NCC1701D",
+            "service_desc": "Turbolift Cabin Filter Replacement"       
+        }
+        response = self.client.post('/tickets', json=ticket_payload)
+        self.assertEqual(response.status_code, 400)
+        data = response.get_json()
+        self.assertIn("customer_id", data)
 
-#     def test_get_all_tickets(self):
-#         response = self.client.get('/tickets')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json[0]['ticket_date'], "test_user")
 
+    def test_update_ticket(self):
+        with self.app.app_context():
+            mechanic = Mechanic(
+                mechanic_name="Geordi La Forge",
+                mechanic_email="imfakingthewholeblindthing@enterprise_d.com",
+                mechanic_phone="556-1701",
+                mechanic_salary="100000"
+            )
+            db.session.add(mechanic)
+            db.session.commit()
+            mechanic_id = mechanic.id
+
+        response = self.client.put(
+            f"/tickets/{self.ticket_id}", json={"mechanic_id": mechanic_id, "action": "add"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("has been added", response.get_json().get("message", ""))
+
+
+    def test_invalid_update_ticket(self):
+        update_payload = {"mechanic_id": 1701, "action": "add"}
+        response = self.client.put(f"/tickets/{self.ticket_id}", json=update_payload)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json().get("error"), "Invalid Mechanic ID")
+
+    def test_get_ticket(self):
+        response = self.client.get(f"/tickets/{self.ticket_id}")
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertEqual(data["vin"], "NCC1701D")
+
+    def test_get_all_tickets(self):
+        response = self.client.get('/tickets')
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]["vin"], "NCC1701D")

@@ -53,8 +53,6 @@ class TestMechanic(unittest.TestCase):
         self.assertEqual(response.json['mechanic_email'], 'nottest@email.com')
 
 
-#DONT FORGET TO ADD GET 1
-
     def test_get_mechanic(self):
         response = self.client.get(f'/mechanics/{self.mechanic_id}')
         self.assertEqual(response.status_code, 200)
