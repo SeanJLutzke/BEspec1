@@ -1,4 +1,4 @@
-from app import create_app
+from flask_app import create_app
 from application.models import db, Customer, Ticket
 import unittest
 from datetime import datetime, timedelta, timezone
