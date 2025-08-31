@@ -13,7 +13,6 @@ class DevelopmentConfig:
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://backend:password@localhost/BEspec'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    #http://127.0.0.1:5000/mechanics/mechanics
 
 class TestingConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///testing.db'
