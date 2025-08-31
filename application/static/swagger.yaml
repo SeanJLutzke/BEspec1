@@ -5,7 +5,7 @@ info:
   title: "SpaceDock"
   description: "This is an API to manage a space Mechanic Shop"
   version: "1.0.0"
-host: "https://bespec1.onrender.com"
+host: "bespec1.onrender.com"
 schemes:
   - "https"
 consumes:
